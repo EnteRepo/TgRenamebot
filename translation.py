@@ -1,7 +1,7 @@
 class Translation(object):
-    START_TEXT = """ Hello {} ,
+    START_TEXT = """ <b>Hello</b> 👋{} ,
     
-I am Telegram Rename Bot! i can Rename all type of telegram files with Permanent Custom Thumbnail Support🥳
+<b>I am Telegram Rename Bot! i can Rename all type of telegram files with Permanent Custom Thumbnail & Custom Caption Support </b>  🥳
 
 <i>Made Love❤️ with</i> <b>@MyTestBotZ</b>
 
@@ -34,13 +34,7 @@ I am Telegram Rename Bot! i can Rename all type of telegram files with Permanent
 ⍟ <i>Reply to that file with /rename new name.ext</i>\n\n
 ➠ <u><b>Rename & Upload as Streaming Video</b></u>
 ⍟ <i> Reply to that file with /video new name.ext</i>\n
-⍟ <i>View your thumbnail \n    do /showthumb command</i>\n
-⍟ <i>Delete your thumbnail \n    do /delthumb command</i>
-   
-       
- ⚠️ <b>Do one By One rename. Otherwise you will get Permenent Ban </b>🤷 ⚠️
-    
-   
+
 ┈┈┈••✿ @MyTestBotZ ✿••┈┈┈
     """
     REPLY_TO_DOC_FOR_RENAME_FILE = """ FCUK! what are you doing 😬. Reply to that File with /rename New Name.extension,
@@ -87,3 +81,20 @@ Expires on: Until my Death</b>"""
  
 All My Bots are hosted in free Server, if you Likes ma Works, & interested you donate some money it will be helpful for me to Pay my Internet Bills ☺️
 **For Donate:** Message ** @OO7ROBot **"""
+    
+    THUMBNAIL_HELP = """<b>Here Are The Available Commands In Custom Thumbnail</b>
+    
+⍟ <i>Send a photo to set as custom thumbnail (Remember it's Permanent)</i>   
+
+⍟  <i>check & preview your current thumbnail 
+    use /showthumb command</i>
+
+⍟ <i>Delete your current thumbnail 
+    use /delthumb command</i>
+   """
+    CCAPTION_HELP = """<b>Here Are The Available Commands In Custom Caption</b>
+    
+⍟ /setcaption - <i>Use This Command To Save Your Custom Caption</i>
+<b>Usage:</b> <code>/setcaption your caption text</code> 
+
+<b>[You Can Use</b> <code>{filename}</code> <b>For showing new file name in the caption]</b> """
