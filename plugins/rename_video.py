@@ -34,6 +34,30 @@ from pyrogram.errors import UserNotParticipant, UserBannedInChannel
 
 from database.database import *
 from plugins.admin import Database, db, BOT_OWNER
+from database.db import *
+
+@pyrogram.Client.on_message(pyrogram.filters.command(["setcaption"]))
+async def set_caption(bot, update):
+    if len(update.command) == 1:
+        await update.reply_text(
+            "Custom Caption \n\n you can use this command to set your own caption  \n\n Usage : /setcaption Your caption text \n\n <b>Note : For current file name use :</b> <code>{filename}</code>", 
+            quote = True, 
+            reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton('Show Current Caption', callback_data = "shw_caption")      
+                ],
+                [
+                    InlineKeyboardButton('Delete Caption', callback_data = "d_caption")
+                ]
+            ]
+        ) 
+        )
+    else:
+        command, CSTM_FIL_CPTN = update.text.split(' ', 1)
+        await update_cap(update.from_user.id, CSTM_FIL_CPTN)
+        await update.reply_text(f"**--Your Caption--:**\n\n{CSTM_FIL_CPTN}\n\n**@TGRenameBot**", quote=True)
+
 
 @pyrogram.Client.on_message(pyrogram.filters.command(["video"]))
 async def rename_video(bot, update):
@@ -84,6 +108,12 @@ For MisUsing This Free Service""")
             return
         description = Translation.CUSTOM_CAPTION_UL_FILE
         download_location = Config.DOWNLOAD_LOCATION + "/"
+        caption_text = await get_caption(update.from_user.id)
+        try:
+           caption_text2 = caption_text.caption.format(filename = file_name)
+        except:
+           caption_text2 =f"<code>{file_name}</code>"
+           pass 
         b = await bot.send_message(
             chat_id=update.chat.id,
             text=Translation.DOWNLOADING,
@@ -157,7 +187,7 @@ For MisUsing This Free Service""")
                 duration=duration,
                 thumb=thumb_image_path,
                # caption=description,
-                caption=f"""<b><code>{file_name} </code>
+                caption=f"""<b><code>{caption_text2} </code>
                 
 Renamed by @TgRenamebot</b> """,
                 # reply_markup=reply_markup,
