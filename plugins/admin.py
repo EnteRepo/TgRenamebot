@@ -107,9 +107,9 @@ async def broadcast(bot, update):
 	            success += 1
 	        else:
 	            failed += 1
-	        if sts == 400:
-	            await db.delete_user(user['id'])
-	        done += 1
+	        #if sts == 400:
+	            #await db.delete_user(user['id'])
+	        #done += 1
 	        if broadcast_ids.get(broadcast_id) is None:
 	            break
 	        else:
