@@ -30,6 +30,7 @@ import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
 from plugins.admin import Database, db, BOT_OWNER
+from database.db import *
 
 def GetExpiryDate(chat_id):
     expires_at = (str(chat_id), "Source Cloned User", "1970.01.01.12.00.00")
@@ -128,7 +129,9 @@ START_BUTTONS = InlineKeyboardMarkup(
 HELP_BUTTONS = InlineKeyboardMarkup(
         [[
         #InlineKeyboardButton(' ⭕ Updates Channel ⭕', url='https://telegram.me/MyTestBotZ')
-        #],[
+        InlineKeyboardButton('🎞️Custom Thumbnail', callback_data = "cthumb"),
+        InlineKeyboardButton('📑Custom Caption', callback_data = "ccaption")
+        ],[
         InlineKeyboardButton('🏡 Home', callback_data='home'),
         InlineKeyboardButton('📝 About', callback_data='about'),
         InlineKeyboardButton('💰 Donate', callback_data='donate')
@@ -159,8 +162,25 @@ DONATE_BUTTONS = InlineKeyboardMarkup(
         ],[
         InlineKeyboardButton('⛔️ Close', callback_data='close')
         ]]
-    )    
+    )
 
+
+HELP_BACK = InlineKeyboardMarkup(
+        [[
+        InlineKeyboardButton('Back', callback_data = "help"),
+        InlineKeyboardButton("⛔ Close", callback_data = "close")
+        ]]
+    )
+
+CAPTION = InlineKeyboardMarkup(
+          [[
+          InlineKeyboardButton('Show Current Caption', callback_data = "shw_caption"),
+          InlineKeyboardButton("Delete Caption", callback_data = "d_caption")
+          ],[
+          InlineKeyboardButton('⬅️Back', callback_data = "help"),
+          InlineKeyboardButton('⛔ Close', callback_data = "close")
+          ]]
+    )
 #---------------- Callback ----------------#
 @pyrogram.Client.on_callback_query()
 async def cb_handler(bot, update):
@@ -189,6 +209,40 @@ async def cb_handler(bot, update):
             text=Translation.ABOUT_TEXT,
             reply_markup=ABOUT_BUTTONS,
             disable_web_page_preview=True
+        )
+    elif update.data == "ccaption":
+        await update.message.edit_text(
+            text=Translation.CCAPTION_HELP,
+            disable_web_page_preview = True,
+            reply_markup=CAPTION
+        )
+    elif update.data == "cthumb":
+        await update.message.edit_text(
+            text=Translation.THUMBNAIL_HELP,
+            disable_web_page_preview = True,
+            reply_markup=HELP_BACK
+        )
+    elif update.data =="shw_caption":
+             try:
+                caption = await get_caption(update.from_user.id)
+                c_text = caption.caption
+             except:
+                c_text = "<i>Sorry but you haven't added any caption yet please set your caption through</i> /setcaption <i>command</i>" 
+             await update.message.edit(
+                  text=f"<b>Your Custom Caption:</b> \n\n{c_text} ",
+                  parse_mode="html", 
+                  disable_web_page_preview=True, 
+                  reply_markup=HELP_BACK
+       )
+    elif update.data == "d_caption":
+        try:
+           await del_caption(update.from_user.id)   
+        except:
+            pass
+        await update.message.edit_text(
+            text="<b>✅ caption deleted successfully</b>",
+            disable_web_page_preview = True,
+            reply_markup=HELP_BACK
         )
     elif update.data == "cancel":
         await update.message.edit_text(
