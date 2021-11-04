@@ -34,6 +34,32 @@ from pyrogram.errors import UserNotParticipant, UserBannedInChannel
 from database.database import *
 from plugins.admin import Database, db, BOT_OWNER
 
+
+from database.db import *
+
+@pyrogram.Client.on_message(pyrogram.filters.command(["setcaption"]))
+async def set_caption(bot, update):
+    if len(update.command) == 1:
+        await update.reply_text(
+            "Custom Caption \n\n you can use this command to set your own caption  \n\n Usage : /setcaption Your caption text \n\n <b>Note : For current file name use :</b> <code>{filename}</code>", 
+            quote = True, 
+            reply_markup=InlineKeyboardMarkup(
+            [
+                [
+                    InlineKeyboardButton('Show Current Caption', callback_data = "shw_caption")      
+                ],
+                [
+                    InlineKeyboardButton('Delete Caption', callback_data = "d_caption")
+                ]
+            ]
+        ) 
+        )
+    else:
+        command, CSTM_FIL_CPTN = update.text.split(' ', 1)
+        await update_cap(update.from_user.id, CSTM_FIL_CPTN)
+        await update.reply_text(f"**--Your Caption--:**\n\n{CSTM_FIL_CPTN}\n\n**@TGRenameBot**", quote=True)
+
+
 @pyrogram.Client.on_message(pyrogram.filters.command(["rename"]))
 async def rename_doc(bot, update):
     if not await db.is_user_exist(update.from_user.id):
@@ -83,6 +109,12 @@ async def rename_doc(bot, update):
             return
         description = Translation.CUSTOM_CAPTION_UL_FILE
         download_location = Config.DOWNLOAD_LOCATION + "/"
+        caption_text = await get_caption(update.from_user.id)
+        try:
+           caption_text2 = caption_text.caption.format(filename = file_name)
+        except:
+           caption_text2 =f"<code>{file_name}</code>"
+           pass 
         a = await bot.send_message(
             chat_id=update.chat.id,
             text=Translation.DOWNLOADING,
@@ -126,11 +158,8 @@ async def rename_doc(bot, update):
                 chat_id=update.chat.id,
                 document=new_file_name,
                 thumb=thumb_image_path,
-               # caption=description,
-                caption=f"""<b>{file_name}  </b>    
-                
-""",
-
+                caption=f"{caption_text2}",
+                #caption=f"""<b>{file_name}  </b>    """,
                 # reply_markup=reply_markup,
                 reply_markup=InlineKeyboardMarkup([[InlineKeyboardButton('⭕Share & Support⭕', url='http://t.me/share/url?url=Hey%20There%E2%9D%A4%EF%B8%8F%2C%0A%20%20%0A%20%20I%20Found%20A%20Really%20Awesome%20Bot%20%20For%20Rename%20any%20Telegram%20Medias%20%26%20File%20With%20Permanent%20Thumbnail%20Support%0A%20%20Hope%20This%20Bot%20Helps%20You%20Too.%E2%9D%A4%EF%B8%8F%E2%9D%A4%EF%B8%8F%E2%9D%A4%EF%B8%8F%0A%20%20%0A%20%20Bot%20Link%20%3A-%20%40TGRenameBot')]]),
                 reply_to_message_id=update.reply_to_message.message_id,
