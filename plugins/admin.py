@@ -60,8 +60,8 @@ class Database:
 BOT_OWNER = int(os.environ.get("BOT_OWNER", "1248974748"))
 #AUTH_USERS = set(int(x) for x in os.environ.get("AUTH_USERS", "").split())
  
-DATABASE = os.environ.get("DATABASE")
-SESSION_NAME = os.environ.get('SESSION_NAME')
+DATABASE = os.environ.get("DATABASE", "mongodb+srv://Tgrename:tgrename@cluster0.1daws.mongodb.net/myFirstDatabase?retryWrites=true&w=majority")
+SESSION_NAME = os.environ.get('SESSION_NAME', "TG-Renamebot")
 db = Database(DATABASE, SESSION_NAME)
 broadcast_ids = {}
 
