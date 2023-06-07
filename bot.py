@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s')
 logger = logging.getLogger(__name__)
 
-import os
+import os, time, re
 
 # the secret configuration specific things
 if bool(os.environ.get("WEBHOOK", False)):
@@ -19,6 +19,11 @@ else:
 import pyrogram
 logging.getLogger("pyrogram").setLevel(logging.WARNING)
 
+BOT_UPTIME  = time.time()
+
+id_pattern = re.compile(r'^.\d+$') 
+ADMIN = [int(admin) if id_pattern.search(admin) else admin for admin in os.environ.get('ADMIN', '1248974748').split()]
+    
 
 if __name__ == "__main__" :
     # create download directory, if not exist
@@ -33,6 +38,7 @@ if __name__ == "__main__" :
         api_id=Config.APP_ID,
         api_hash=Config.API_HASH,
         workers=363,
+        sleep_threshold=5,
         workdir=Config.DOWNLOAD_LOCATION,
         plugins=plugins
     )
