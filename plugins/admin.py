@@ -180,12 +180,12 @@ async def get_stats(bot, message):
 	    text=f"""**BotStatus**
      
 ● **Bot Uptime: {diff}**
-
-●**Total Users: {total_users}**
+● **Total Users: {total_users}**
 
 **BOT DATA USAGE**
-__UPLOAD: {sent}
-DOWNLOAD: {recv}__
+
+● __UPLOAD: {sent}
+● DOWNLOAD: {recv}__
      """,
     quote=True)
 
