@@ -57,7 +57,7 @@ class Database:
     
     
 
-BOT_UPTIME  = time.time()
+StartTime  = time.time()
 
 BOT_OWNER = int(os.environ.get("BOT_OWNER", "1248974748"))
 #AUTH_USERS = set(int(x) for x in os.environ.get("AUTH_USERS", "").split())
@@ -142,16 +142,20 @@ async def status(bot, update):
 @Client.on_message(filters.command(["stats", "status"]))# & filters.user(Config.ADMIN))
 async def get_stats(bot, message):
     total_users = await db.total_users_count()
-    uptime = time.strftime("%Hh%Mm%Ss", time.gmtime(time.time() - bot.uptime))    
-    start_t = time.time()
-    st = await message.reply('**Aᴄᴄᴇꜱꜱɪɴɢ Tʜᴇ Dᴇᴛᴀɪʟꜱ.....**')    
-    end_t = time.time()
-    time_taken_s = (end_t - start_t) * 1000
-    await st.edit(text=f"**--Bᴏᴛ Sᴛᴀᴛᴜꜱ--** \n\n**⌚️ Bᴏᴛ Uᴩᴛɪᴍᴇ:** {uptime} \n**🐌 Cᴜʀʀᴇɴᴛ Pɪɴɢ:** `{time_taken_s:.3f} ᴍꜱ` \n**👭 Tᴏᴛᴀʟ Uꜱᴇʀꜱ:** `{total_users}`")
+    diff = time.time() - StartTime
+    diff = readable_time(diff)
+    await message.reply_text(
+	    text=f"""**BotStatus**
+     
+● **Bot Uptime: {diff}**
+
+●**Total Users: {total_users}**
+     """,
+    quote=True)
 
 
 #Restart to cancell all process 
 @Client.on_message(filters.private & filters.command("restart") & filters.user(BOT_OWNER))
-async def restart_bot(b, m):
-    await m.reply_text("🔄__Rᴇꜱᴛᴀʀᴛɪɴɢ.....__")
+async def restart_bot(bot, message):
+    await message.reply_text("🔄__Rᴇꜱᴛᴀʀᴛɪɴɢ.....__")
     os.execl(sys.executable, sys.executable, *sys.argv)
