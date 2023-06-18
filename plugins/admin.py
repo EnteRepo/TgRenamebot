@@ -182,6 +182,10 @@ async def get_stats(bot, message):
 ● **Bot Uptime: {diff}**
 
 ●**Total Users: {total_users}**
+
+**BOT DATA USAGE**
+__UPLOAD: {sent}
+DOWNLOAD: {recv}__
      """,
     quote=True)
 
