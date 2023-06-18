@@ -10,6 +10,7 @@ import asyncio
 import datetime
 import motor.motor_asyncio
 import aiofiles
+import psutil
 #from io import BytesIO
 from pyrogram import Client, filters
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -73,6 +74,19 @@ def readable_time(seconds: int) -> str:
     result += f'{seconds}s'
     return result    
 
+def humanbytes(size):
+    # https://stackoverflow.com/a/49361727/4723940
+    # 2**10 = 1024
+    if not size:
+        return ""
+    power = 2**10
+    n = 0
+    Dic_powerN = {0: ' ', 1: 'K', 2: 'M', 3: 'G', 4: 'T'}
+    while size > power:
+        size /= power
+        n += 1
+    return str(round(size, 2)) + " " + Dic_powerN[n] + 'B'
+	
 StartTime  = time.time()
 
 BOT_OWNER = int(os.environ.get("BOT_OWNER", "1248974748"))
@@ -160,6 +174,8 @@ async def get_stats(bot, message):
     total_users = await db.total_users_count()
     diff = time.time() - StartTime
     diff = readable_time(diff)
+    sent = humanbytes(psutil.net_io_counters().bytes_sent)
+    recv = humanbytes(psutil.net_io_counters().bytes_recv)
     await message.reply_text(
 	    text=f"""**BotStatus**
      
