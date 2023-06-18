@@ -57,6 +57,7 @@ class Database:
     
     
 
+BOT_UPTIME  = time.time()
 
 BOT_OWNER = int(os.environ.get("BOT_OWNER", "1248974748"))
 #AUTH_USERS = set(int(x) for x in os.environ.get("AUTH_USERS", "").split())
